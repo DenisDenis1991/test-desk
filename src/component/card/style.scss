@@ -1,8 +1,39 @@
-.card-list__item {
-  background-color: blanchedalmond;
+.card-list{
+  &__item {
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: white;
+    word-wrap: break-word;
+    min-width: 50px;
+    padding: 5px;
+    resize: horizontal;
+    overflow: hidden;
+    box-shadow: 2px 5px 5px darkgray;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+  
+  &__box {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+  }
+
+  &__btn {
+    background-color: transparent;
+    border: 1px solid black;
+
+    &:not(:last-child) {
+      margin-bottom: 5px;
+    }
+  }
+}
+.drag {
+  background-color: lightcyan;
+
+  & .card-list__heading {
+    background-color: lightcyan;
+  }
 }
 
-.asd {
-  display: flex;
-  flex-direction: column;
-}
