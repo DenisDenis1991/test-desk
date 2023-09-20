@@ -6,13 +6,13 @@ import AdditionCard from '../add-card/addition-card'
 const CardsList = () => {
   const cardsList = useSelector((state) => state.reducer.cards)
   return (
-    <ul className="card-list"> 
-      {cardsList.map((card) => {return (<Card card={card} key={card.id} />)})}
-      {
-        cardsList.length<12 ? <AdditionCard /> : null
-      }
-      
-    </ul>
+    <>
+      {cardsList.length<12 ? <AdditionCard /> : null}
+      <ul style={{'gridTemplateColumns': `repeat(${cardsList.length}, max-content)`}} className="card-list"> 
+        {cardsList.map((card) => {return (<li key={card.id}><Card card={card} cardList = {true}/></li>)})}
+        
+      </ul>
+    </>
   )
 }
 

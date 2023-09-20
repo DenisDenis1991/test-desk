@@ -1,28 +1,23 @@
 /* eslint-disable react/prop-types */
 import './style.scss';
 import {useDispatch, useSelector} from 'react-redux'
-import { setOpenModal, setCurrentId, deleteCard, setDragCard, setDropCard, addInsideFlag } from '../../store/data.slice';
-import { useState, useRef, useEffect } from 'react';
+import { setOpenModal, setCurrentId, deleteCard, setDragCard, setDropCard, addInsideFlag, setDropInsideCard } from '../../store/data.slice';
+import { useState, useRef } from 'react';
 
-const Card = ({card}) => {
-  const [, setCurrenCard] = useState(null)
+const Card = ({card, cardList}) => {
   const [isResizing, setIsResizing] = useState(false);
-  const [inside, setInside] = useState(false)
   
   const [startX, setStartX] = useState(0);
   const componentRef = useRef(null);
   const dispatch = useDispatch();
  
   const insideCard = useSelector(state => state.reducer.insideCard)
-  const insideFlag = useSelector(state => state.reducer.insideFlag)
 
-  useEffect(() => {
-    if (inside || insideFlag) {
-      dispatch(addInsideFlag())
-      dispatch(setOpenModal(true))
-      dispatch(setCurrentId(card))
-    }
-  }, [inside])
+  const handleAddInsideCard = (card) => {
+    dispatch(addInsideFlag())
+    dispatch(setOpenModal(true))
+    dispatch(setCurrentId(card))
+  }
 
   const handleEditCard = (card) => {
       dispatch(setCurrentId(card))
@@ -31,17 +26,15 @@ const Card = ({card}) => {
 
   const handleDeleteCard = (card) => {
     dispatch(deleteCard(card))
-    setCurrenCard(card)
   }
-
 
   const dragStartHandler = (e, card) => {
     dispatch(setDragCard(card.id))
-    console.log(card)
   }
 
   const dragEndHandler = (e) => {
     e.currentTarget.classList.remove('drag');
+
   }
   const dragOverHandler = (e) => {
     e.preventDefault()
@@ -49,8 +42,10 @@ const Card = ({card}) => {
   }
   const dropHandler = (e, card) => {
     e.preventDefault()
+
     e.currentTarget.classList.remove('drag');
     dispatch(setDropCard(card.id))
+    dispatch(setDropInsideCard(card.id))
   }
 
   const handleMouseDown = (e) => {
@@ -71,36 +66,34 @@ const Card = ({card}) => {
     setStartX(e.clientX);
   };
 
-
   return (
-    <li 
-      id={card.insideCardId+100||card.id}
+    
+    <div 
       ref={componentRef}
       onDragStart={(e) => dragStartHandler(e, card)}
       onDragLeave={(e) => dragEndHandler(e)}
       onDragEnd={(e) => dragEndHandler(e)}
       onDragOver={(e) => dragOverHandler(e)}
       onDrop = {(e) => dropHandler(e, card)}
-      draggable={true}
+      draggable={cardList}
       className='card-list__item'
     >
+      
         <h2 className='card-list__heading'>{card?.title}</h2>
         <p className='card-list__description'>{card?.text}</p>
-        <span>{card?.id}</span>
         <div className='card-list__box'>
-          <button id={card.insideCardId+100||card.id} className='card-list__btn' onClick={() => handleEditCard(card)}>Edit</button>
-          <button className='card-list__btn' onClick={() => {handleDeleteCard(card)}}>Delete</button>
-          <button className='card-list__btn' disabled={insideFlag} onClick={()=> setInside(!inside)}>add</button>
+          <button className='card-list__btn' onClick={()=> handleEditCard(card)}>Edit</button>
+          <button className='card-list__btn' onClick={()=> handleDeleteCard(card)}>Delete</button>
+          <button className='card-list__btn' onClick={()=> handleAddInsideCard(card)}>Inside</button>
         </div>
         <div
-          className="resize-handle"
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
         />
    
-        {inside && !insideFlag? insideCard.map(el=> el.id === card.id?<Card key={el.id} card={el}/>: null) : null}
-    </li> 
+        {card.innerCard? insideCard.map(el=> el.id === card.id?<div key={el.insideCardId}><Card card={el}/></div>: null) : null}
+    </div> 
   )
 }
 

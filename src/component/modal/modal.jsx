@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './style.scss';
 import {useDispatch, useSelector} from 'react-redux'
-import { setOpenModal, setCurrentId, editCard, addCard, addInsideFlag, insideCard, editInsideCard } from '../../store/data.slice';
+import { setOpenModal, setCurrentId, editCard, addCard, addInsideFlag, insideCard, editInsideCard, addNewCard } from '../../store/data.slice';
 import { useEffect, useState } from 'react';
 
 const Modal = () => {
@@ -9,21 +10,33 @@ const Modal = () => {
   const openModal = useSelector((state) => state.reducer.openModal)
   const currentCard = useSelector((state) => state.reducer.currentId)
   const insideFlag = useSelector((state) => state.reducer.insideFlag)
-
+  const newCard = useSelector((state) => state.reducer.newCard)
+  
   useEffect(() => {
-    if (currentCard) {
+    if (!insideFlag && !newCard) {
+      console.log('эстейт основной карточки')
       setInputValue({
         title: currentCard?.title,
         text: currentCard.text,
         id: currentCard.id,
-        insideCardId: currentCard.insideCardId !== null? currentCard.insideCardId : '',
       })
-    } else {
+    }  
+    
+    if (insideFlag){
+      console.log('cстейт внутренней карточки')
       setInputValue({
         title: '',
         text: '',
-        id: ''
-    })
+        id: currentCard.id || '',
+      })
+    }
+    if (newCard) {
+      console.log('эстейт новой карточки')
+      setInputValue({
+        title: '',
+        text: '',
+        id: '',
+      })
     }
   }, [currentCard])
 
@@ -35,23 +48,31 @@ const Modal = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (currentCard && !insideFlag && currentCard.insideCardId === undefined) {
+    if (currentCard && !insideFlag && currentCard.insideCardId === undefined) { //редактирование карточки
+      console.log('редактирование карточки')    
       dispatch(setOpenModal(false))
+
       dispatch(setCurrentId(null))
       dispatch(editCard(inputValue))
       
     }
-    if (currentCard===null && !insideFlag) {
+    if (newCard) {         
+      console.log('добавление пустой карточки')                               //добавление пустой карточки
       dispatch(setOpenModal(false))
       dispatch(addCard(inputValue))
-    } 
-    if(insideFlag) {
+      dispatch(addNewCard())                                              // добавление внутренней карточки 
+    }
+
+    if(insideFlag) {        
+      console.log('добавление внутренней карточки ')    
       dispatch(setOpenModal(false))
+      console.log(inputValue)
       dispatch(insideCard(inputValue))
       dispatch(addInsideFlag())
     }
-    if(currentCard.insideCardId !== undefined) {
-      dispatch(editInsideCard(inputValue))
+    if(currentCard && !insideFlag && currentCard.insideCardId !== undefined) {    
+      console.log('редактирование внутренней карточки')                                                                      // редактирование внутренней карточки
+      dispatch(editInsideCard({...inputValue, insideCardId: currentCard.insideCardId}))
       dispatch(setOpenModal(false))
       dispatch(setCurrentId(null))
     }
@@ -70,7 +91,7 @@ const Modal = () => {
           <input
             className='form__input'
             name='title'
-            required={insideFlag}
+            
             id='title'
             placeholder='Заголовок'
             value= {inputValue.title || ''}

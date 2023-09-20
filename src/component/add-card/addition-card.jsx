@@ -1,17 +1,16 @@
 import {useDispatch} from 'react-redux'
-import { setOpenModal } from '../../store/data.slice';
+import { addNewCard, setOpenModal } from '../../store/data.slice';
 
 const AdditionCard = () => {
   const dispatch = useDispatch();
   const handleAddCard = () => {
     dispatch(setOpenModal(true))
+    dispatch(addNewCard())
   }
   return (
-    <li className='card-list__item'>
-      <div className='card-list__box'>
-        <button className='card-list__btn' onClick={() => handleAddCard()}>Add</button>
-      </div>
-    </li>
+    <div className='add-button'>
+      <button className='card-list__btn' onClick={() => handleAddCard()}>Add new card</button>
+    </div>
   )
 }
 
