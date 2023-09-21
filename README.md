@@ -5,7 +5,10 @@
 Перемещение карточки относительно других;
 Удаление карточки.
 Доп. функционал - добавление внутрь карточки дочерних карточек с тем жи функционалом
-
+Стэк:
+JS
+React + Redux Toolkit
+Scss
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

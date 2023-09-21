@@ -58,29 +58,39 @@ export const dataCards = createSlice ({
       state.dragCard = action.payload;
     },
     setDropCard: (state, action) => {
-      state.cards= state.cards.map(card =>{
-        if (card.id === action.payload) {
-          return {...card, innerCard: true, id: state.dragCard}
-        }
-        if (card.id === state.dragCard) {
-           return{...card, innerCard: true, id: action.payload}
-        }
-        return card
-      }).sort((a,b) => a.id - b.id)
+      state.cards = state.cards.map(el => el.id === action.payload? {...el, innerCard: true}: {...el})
     },
     setDropInsideCard: (state, action) => {
-      state.insideCard= state.insideCard.map(card =>{
-        if (card.id === action.payload) {
-          return {...card, id: state.dragCard}
-        }
-        if (card.id === state.dragCard) {
-           return{...card, id: action.payload}
-        }
-        return card
-      }).sort((a,b) => a.id - b.id)
+      if (state.dragCard.insideCardId === undefined) {
+        state.cards= state.cards.map(card =>{
+          if (card.id === action.payload.id) {
+            return {...card, innerCard: true, id: state.dragCard.id}
+          }
+          if (card.id === state.dragCard.id) {
+             return{...card, innerCard: true, id: action.payload.id}
+          }
+          return card
+        }).sort((a,b) => a.id - b.id)
+        state.insideCard= state.insideCard.map(card =>{
+          if (card.id === action.payload.id) {
+            return {...card, id: state.dragCard.id}
+          }
+          if (card.id === state.dragCard.id) {
+             return{...card, id: action.payload.id}
+          }
+          return card
+        })
+      } else {
+        state.insideCard = state.insideCard.map(card =>{
+          if (card.insideCardId === state.dragCard.insideCardId) {
+            return {...card, id: action.payload.id}
+          }
+          return card
+        })
+      }
     },
     addCard: (state, action) => {
-      state.cards = [...state.cards,{...action.payload, innerCard: false, id: state.cards.reduce((a,b) => a>b? a.id+1:b.id+1, 1)}]
+      state.cards = [...state.cards,{...action.payload, innerCard: true, id: state.cards.reduce((a,b) => a>b? a.id+1:b.id+1, 1)}]
     },
     insideCard: (state, action) => {
       state.cards = state.cards.map(el => el.id === action.payload.id? {...el, innerCard: true}: {...el})

@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { setOpenModal, setCurrentId, deleteCard, setDragCard, setDropCard, addInsideFlag, setDropInsideCard } from '../../store/data.slice';
 import { useState, useRef } from 'react';
 
-const Card = ({card, cardList}) => {
+const Card = ({card}) => {
   const [isResizing, setIsResizing] = useState(false);
   
   const [startX, setStartX] = useState(0);
@@ -29,7 +29,12 @@ const Card = ({card, cardList}) => {
   }
 
   const dragStartHandler = (e, card) => {
-    dispatch(setDragCard(card.id))
+    if (card.insideCardId !== undefined) {
+      e.stopPropagation()  
+      dispatch(setDragCard(card))
+    } else {
+      dispatch(setDragCard(card))
+    }
   }
 
   const dragEndHandler = (e) => {
@@ -42,10 +47,9 @@ const Card = ({card, cardList}) => {
   }
   const dropHandler = (e, card) => {
     e.preventDefault()
-
     e.currentTarget.classList.remove('drag');
     dispatch(setDropCard(card.id))
-    dispatch(setDropInsideCard(card.id))
+    dispatch(setDropInsideCard(card))
   }
 
   const handleMouseDown = (e) => {
@@ -73,9 +77,9 @@ const Card = ({card, cardList}) => {
       onDragStart={(e) => dragStartHandler(e, card)}
       onDragLeave={(e) => dragEndHandler(e)}
       onDragEnd={(e) => dragEndHandler(e)}
-      onDragOver={(e) => dragOverHandler(e)}
+      onDragOver={(e) => dragOverHandler(e, card)}
       onDrop = {(e) => dropHandler(e, card)}
-      draggable={cardList}
+      draggable={true}
       className='card-list__item'
     >
       <h2 className='card-list__heading'>{card?.title}</h2>
