@@ -14,7 +14,6 @@ const Modal = () => {
   
   useEffect(() => {
     if (!insideFlag && !newCard) {
-      console.log('эстейт основной карточки')
       setInputValue({
         title: currentCard?.title,
         text: currentCard.text,
@@ -23,15 +22,13 @@ const Modal = () => {
     }  
     
     if (insideFlag){
-      console.log('cстейт внутренней карточки')
       setInputValue({
         title: '',
         text: '',
-        id: currentCard.id || '',
+        id: currentCard.id,
       })
     }
     if (newCard) {
-      console.log('эстейт новой карточки')
       setInputValue({
         title: '',
         text: '',
@@ -48,30 +45,28 @@ const Modal = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (currentCard && !insideFlag && currentCard.insideCardId === undefined) { //редактирование карточки
-      console.log('редактирование карточки')    
+    //редактирование карточки
+    if (currentCard && !insideFlag && currentCard.insideCardId === undefined) {
       dispatch(setOpenModal(false))
 
       dispatch(setCurrentId(null))
       dispatch(editCard(inputValue))
       
     }
-    if (newCard) {         
-      console.log('добавление пустой карточки')                               //добавление пустой карточки
+    //добавление пустой карточки
+    if (newCard) {
       dispatch(setOpenModal(false))
       dispatch(addCard(inputValue))
-      dispatch(addNewCard())                                              // добавление внутренней карточки 
+      dispatch(addNewCard())                                              
     }
-
-    if(insideFlag) {        
-      console.log('добавление внутренней карточки ')    
+    // добавление внутренней карточки
+    if(insideFlag) { 
       dispatch(setOpenModal(false))
-      console.log(inputValue)
       dispatch(insideCard(inputValue))
       dispatch(addInsideFlag())
     }
-    if(currentCard && !insideFlag && currentCard.insideCardId !== undefined) {    
-      console.log('редактирование внутренней карточки')                                                                      // редактирование внутренней карточки
+    // редактирование внутренней карточки
+    if(currentCard && !insideFlag && currentCard.insideCardId !== undefined) {
       dispatch(editInsideCard({...inputValue, insideCardId: currentCard.insideCardId}))
       dispatch(setOpenModal(false))
       dispatch(setCurrentId(null))

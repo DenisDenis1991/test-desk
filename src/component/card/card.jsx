@@ -78,21 +78,19 @@ const Card = ({card, cardList}) => {
       draggable={cardList}
       className='card-list__item'
     >
-      
-        <h2 className='card-list__heading'>{card?.title}</h2>
-        <p className='card-list__description'>{card?.text}</p>
-        <div className='card-list__box'>
-          <button className='card-list__btn' onClick={()=> handleEditCard(card)}>Edit</button>
-          <button className='card-list__btn' onClick={()=> handleDeleteCard(card)}>Delete</button>
-          <button className='card-list__btn' onClick={()=> handleAddInsideCard(card)}>Inside</button>
-        </div>
-        <div
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
-        />
-   
-        {card.innerCard? insideCard.map(el=> el.id === card.id?<div key={el.insideCardId}><Card card={el}/></div>: null) : null}
+      <h2 className='card-list__heading'>{card?.title}</h2>
+      <p className='card-list__description'>{card?.text}</p>
+      <div className='card-list__box'>
+        <button className='card-list__btn' onClick={()=> handleEditCard(card)}>Edit</button>
+        <button className='card-list__btn' onClick={()=> handleDeleteCard(card)}>Delete</button>
+        <button className='card-list__btn' onClick={()=> handleAddInsideCard(card)}>Inside</button>
+      </div>
+      <div
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+      />
+      {card.innerCard? insideCard.map(el=> el.id === card.id?<div key={el.insideCardId}><Card card={el}/></div>: null) : null}
     </div> 
   )
 }
