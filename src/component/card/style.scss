@@ -4,7 +4,6 @@
     border-radius: 5px;
     background-color: white;
     word-wrap: break-word;
-    min-width: 90px;
     min-height: 270px;
     padding: 5px;
     resize: horizontal;
@@ -13,12 +12,21 @@
     display: flex;
     flex-direction: column;
     margin-top: 10px;
+    width: calc((100vw - 4rem)/12 - 25px);
+    max-width: calc(100vw/6);
   }
 
   &__box {
     display: flex;
     flex-direction: column;
     margin-top: auto;
+  }
+
+  &__inside-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0;
   }
 
   &__btn {

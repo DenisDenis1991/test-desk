@@ -9,8 +9,7 @@ const CardsList = () => {
     <>
       {cardsList.length<12 ? <AdditionCard /> : null}
       <ul style={{'gridTemplateColumns': `repeat(${cardsList.length}, max-content)`}} className="card-list"> 
-        {cardsList.map((card) => {return (<li key={card.id}><Card card={card} /></li>)})}
-        
+        {cardsList.map((card) => {return (<Card key={card.id} card={card} />)})}
       </ul>
     </>
   )

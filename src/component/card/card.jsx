@@ -94,7 +94,11 @@ const Card = ({card}) => {
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       />
-      {card.innerCard? insideCard.map(el=> el.id === card.id?<div key={el.insideCardId}><Card card={el}/></div>: null) : null}
+      {card.innerCard?
+        <div className='card-list__inside-box'>
+        {insideCard.map(el => el.id === card.id?<Card key={el.insideCardId} card={el}/>: null) }
+        </div>
+        : null}
     </div> 
   )
 }
