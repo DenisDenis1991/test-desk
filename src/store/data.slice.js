@@ -96,11 +96,11 @@ export const dataCards = createSlice ({
       state.cards = state.cards.map(el => el.id === action.payload.id? {...el, innerCard: true}: {...el})
       state.insideCard = [...state.insideCard,{...action.payload, insideCardId: state.insideCard.length}]
     },
-    addInsideFlag: (state) => {
-      state.insideFlag = !state.insideFlag
+    addInsideFlag: (state, action) => {
+      state.insideFlag = action.payload
     },
-    addNewCard: (state) => {
-      state.newCard = !state.newCard
+    addNewCard: (state, action) => {
+      state.newCard = action.payload
     }
   }
 })

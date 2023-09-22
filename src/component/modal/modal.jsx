@@ -40,7 +40,8 @@ const Modal = () => {
   const handleCloseModal = () => {
     dispatch(setOpenModal(false))
     dispatch(setCurrentId(null))
-    dispatch(addInsideFlag())
+    dispatch(addInsideFlag(false))
+    dispatch(addNewCard(false)) 
   }
 
   const handleSubmit = (event) => {
@@ -48,7 +49,6 @@ const Modal = () => {
     //редактирование карточки
     if (currentCard && !insideFlag && currentCard.insideCardId === undefined) {
       dispatch(setOpenModal(false))
-
       dispatch(setCurrentId(null))
       dispatch(editCard(inputValue))
       
@@ -57,13 +57,13 @@ const Modal = () => {
     if (newCard) {
       dispatch(setOpenModal(false))
       dispatch(addCard(inputValue))
-      dispatch(addNewCard())                                              
+      dispatch(addNewCard(false))                                              
     }
     // добавление внутренней карточки
     if(insideFlag) { 
       dispatch(setOpenModal(false))
       dispatch(insideCard(inputValue))
-      dispatch(addInsideFlag())
+      dispatch(addInsideFlag(false))
     }
     // редактирование внутренней карточки
     if(currentCard && !insideFlag && currentCard.insideCardId !== undefined) {

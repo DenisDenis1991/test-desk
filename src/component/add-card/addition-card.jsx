@@ -5,7 +5,7 @@ const AdditionCard = () => {
   const dispatch = useDispatch();
   const handleAddCard = () => {
     dispatch(setOpenModal(true))
-    dispatch(addNewCard())
+    dispatch(addNewCard(true))
   }
   return (
     <div className='add-button'>

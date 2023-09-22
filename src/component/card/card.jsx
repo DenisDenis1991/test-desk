@@ -14,7 +14,7 @@ const Card = ({card}) => {
   const insideCard = useSelector(state => state.reducer.insideCard)
 
   const handleAddInsideCard = (card) => {
-    dispatch(addInsideFlag())
+    dispatch(addInsideFlag(true))
     dispatch(setOpenModal(true))
     dispatch(setCurrentId(card))
   }
