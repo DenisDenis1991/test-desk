@@ -16,18 +16,25 @@
     max-width: calc(100vw/6);
   }
 
+  &__inside-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0;
+    overflow: hidden;
+
+    & + .card-list__item {
+      flex-shrink: 1;
+    }
+  }
+
+
   &__box {
     display: flex;
     flex-direction: column;
     margin-top: auto;
   }
 
-  &__inside-box {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0;
-  }
 
   &__btn {
     background-color: transparent;

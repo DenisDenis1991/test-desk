@@ -1,16 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
+import {addInsideCard, editCard, deleteCard, changeCardId} from '../utils/utils';
 
 const initialState = {
   cards: [],
   openModal: false,
   currentId: null,
-  editUser: null,
   dragCard: null,
-  insideId: null,
   addCards: null,
   insideFlag: false,
   insideCard: [],
-  newCard: false,
+  newCard: [],
 }
 
 export const dataCards = createSlice ({
@@ -25,53 +24,21 @@ export const dataCards = createSlice ({
     },
     setCurrentId: (state, action) => {
       state.currentId = action.payload;
+      state.curCar = action.payload;
+    },
+    setEditCard: (state, action) => {
+      editCard(state.cards, action.payload)
     },
 
-    editCard: (state, action) => {
-      state.cards = state.cards.map(card => {
-        if (card.id === action.payload.id) {
-          return ({...card, title: action.payload.title, text: action.payload.text})
-        } else {
-          return card
-        }
-      })
+    setDeleteCard: (state, action) => {
+      deleteCard(state.cards, action.payload)   
     },
-    editInsideCard: (state, action) => {
-      state.insideCard = state.insideCard.map(card => {
-        if (card.insideCardId === action.payload.insideCardId) {
-          return ({...card, title: action.payload.title, text: action.payload.text})
-        } else {
-          return card
-        }
-      })
-    },
-    deleteCard: (state, action) => {    
-      if (action.payload.insideCardId !==undefined) {
-        state.insideCard = state.insideCard.filter(card => (card.insideCardId !== action.payload.insideCardId))
-      } else {
-        state.cards = state.cards.filter(card => card.id !== action.payload.id)
-        state.insideCard = state.insideCard.filter(card => card.id !== action.payload.id)
-      }
-    },
-
     setDragCard: (state, action) => {
       state.dragCard = action.payload;
     },
     setDropCard: (state, action) => {
-      state.cards = state.cards.map(el => el.id === action.payload? {...el, innerCard: true}: {...el})
-    },
-    setDropInsideCard: (state, action) => {
-      if (state.dragCard.insideCardId === undefined) {
+      if (state.dragCard.selfId === undefined ) {
         state.cards= state.cards.map(card =>{
-          if (card.id === action.payload.id) {
-            return {...card, innerCard: true, id: state.dragCard.id}
-          }
-          if (card.id === state.dragCard.id) {
-             return{...card, innerCard: true, id: action.payload.id}
-          }
-          return card
-        }).sort((a,b) => a.id - b.id)
-        state.insideCard= state.insideCard.map(card =>{
           if (card.id === action.payload.id) {
             return {...card, id: state.dragCard.id}
           }
@@ -79,30 +46,20 @@ export const dataCards = createSlice ({
              return{...card, id: action.payload.id}
           }
           return card
-        })
-      } else {
-        state.insideCard = state.insideCard.map(card =>{
-          if (card.insideCardId === state.dragCard.insideCardId) {
-            return {...card, id: action.payload.id}
-          }
-          return card
-        })
+        }).sort((a,b) => a.id - b.id)      
       }
+      if(state.dragCard.selfId !== undefined) {
+        changeCardId(state.dragCard, action.payload, state.cards)
+      }  
     },
+
     addCard: (state, action) => {
-      state.cards = [...state.cards,{...action.payload, innerCard: true, id: state.cards.reduce((a,b) => a>b? a.id+1:b.id+1, 1)}]
+      state.cards.push({...action.payload, id: state.cards.reduce((a,b) => a>b? a.id+1:b.id+1, 1) })
     },
-    insideCard: (state, action) => {
-      state.cards = state.cards.map(el => el.id === action.payload.id? {...el, innerCard: true}: {...el})
-      state.insideCard = [...state.insideCard,{...action.payload, insideCardId: state.insideCard.length}]
+    setInsideCard: (state, action) => {
+      addInsideCard(state.cards, action.payload)
     },
-    addInsideFlag: (state, action) => {
-      state.insideFlag = action.payload
-    },
-    addNewCard: (state, action) => {
-      state.newCard = action.payload
-    }
   }
 })
 
-export const {initCards, setOpenModal, setCurrentId, editCard, deleteCard, setDragCard, setDropCard, setDropInsideCard,addCard, addInsideFlag, insideCard, addNewCard, editInsideCard} = dataCards.actions;
+export const {initCards, setOpenModal, setCurrentId, setEditCard, setDeleteCard, setDragCard, setDropCard, addCard,  setInsideCard} = dataCards.actions;

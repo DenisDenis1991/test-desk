@@ -1,11 +1,11 @@
 import {useDispatch} from 'react-redux'
-import { addNewCard, setOpenModal } from '../../store/data.slice';
+import { initState } from '../../const';
+import { addCard } from '../../store/data.slice';
 
 const AdditionCard = () => {
   const dispatch = useDispatch();
   const handleAddCard = () => {
-    dispatch(setOpenModal(true))
-    dispatch(addNewCard(true))
+    dispatch(addCard(initState))
   }
   return (
     <div className='add-button'>
